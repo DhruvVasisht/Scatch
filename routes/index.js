@@ -3,11 +3,21 @@ const router=express.Router();
 const isLoggedin=require('../middlewares/isLoggedin');
 const productModel=require("../models/product-model");
 const userModel=require("../models/user-model");
+const payment=require("../models/payment");
+require('dotenv').config();
+const Razorpay = require('razorpay');
+// const razorpay = new Razorpay({
+//   key_id: process.env.RAZORPAY_KEY_ID,
+//   key_secret: process.env.RAZORPAY_KEY_SECRET,
+// });
 
-router.get("/", function (req, res) {
-  let error =req.flash("error");  
-   res.render("index",{error});
- });
+router.get("/", (req, res) => {
+  if (req.cookies.token) {
+    return res.redirect('/shop');
+  }
+  let error = req.flash("error");
+  res.render("index", { error });
+});
 
  router.get("/shop", isLoggedin, async (req, res) => {
   let products = await productModel.find()
@@ -100,6 +110,7 @@ router.post("/cart/remove/:id", isLoggedin, async (req, res) => {
     res.redirect("/cart");
   }
 });
+
 
 
 module.exports=router;
