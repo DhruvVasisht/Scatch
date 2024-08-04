@@ -18,27 +18,27 @@
         }
       </script>
     <script src="https://cdn.tailwindcss.com"></script>
-  
 </head>
 
 <body class="font-helvetica font-normal">
-    <% if(success.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500">
+    <% if(success.length > 0) { %>
+        <div id="flash-message" class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500">
             <span class="inline-block mt-1 mb-1 text-white">
                 <%= success %>
             </span>
         </div>
-        <% } %>
- 
-  <nav class="w-full flex justify-between px-5 py-3">
-    <h3 class="text-2xl">Shop</h3>
+    <% } %>
+
+    <nav class="w-full flex justify-between px-5 py-3">
+        <h3 class="text-2xl">Shop</h3>
         <div class="flex gap-8 text-lg">
-            <a href="">Home</a>
+            <a href="/">Home</a>
             <a href="/cart">Cart</a>
-            <a href="">My Account</a>
+            <a href="/account">My Account</a>
             <a class="text-red-600" href="/users/logout">Logout</a>
-        </div>   
+        </div>
     </nav>
+
     <div class="w-full h-screen flex items-start px-8 py-8">
         <div class="w-[25%] flex h-screen flex-col items-start">
             <div class="flex items-center gap-2">
@@ -51,33 +51,31 @@
                 </form>
             </div>
             <div class="flex flex-col mt-20">
-                <a class="block w-fit mb-2" href="">New Collection</a>
-                <a class="block w-fit mb-2" href="">All Products</a>
-                <a class="block w-fit mb-2" href="">Discounted Products</a>
+                <a class="block w-fit mb-2" href="/new-collection">New Collection</a>
+                <a class="block w-fit mb-2" href="/all-products">All Products</a>
+                <a class="block w-fit mb-2" href="/discounted-products">Discounted Products</a>
             </div>
             <div class="mt-32">
-                <a class="block w-fit mb-2" href="">Filter by :</a>
-                <a class="block w-fit mb-2" href="">Availability</a>
-                <a class="block w-fit mb-2" href="">Discount</a>
+                <a class="block w-fit mb-2" href="#">Filter by :</a>
+                <a class="block w-fit mb-2" href="#">Availability</a>
+                <a class="block w-fit mb-2" href="#">Discount</a>
             </div>
         </div>
         <div class="w-[75%] flex flex-col gap-5 h-screen">
-            <div class="grid grid-cols-4 gap-8 ">
+            <div class="grid grid-cols-4 gap-8">
                 <% products.forEach(function(product){ %>
                     <div class="w-60">
                         <div class="w-full h-52 flex items-center justify-center bg-[#<%= product.bgcolor %>]">
                             <img class="h-[12rem]" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
                                 alt="Product Image">
                         </div>
-                        <div
-                            class="flex justify-between bg-[#<%= product.panelcolor %>] items-center px-4 py-4 text-[#<%= product.textcolor %>]">
+                        <div class="flex justify-between bg-[#<%= product.panelcolor %>] items-center px-4 py-4 text-[#<%= product.textcolor %>]">
                             <div>
                                 <h3>
                                     <%= product.name %>
                                 </h3>
                                 <h4>₹ <%= product.price %>  <% if (product.discount > 0) { %>
-                                    <span
-                                        class=" top-0 right-0 m-2 bg-red-500 text-white text-xs rounded-full px-2 py-1">-<%= product.discount %>%</span>
+                                    <span class="top-0 right-0 m-2 bg-red-500 text-white text-xs rounded-full px-2 py-1">-<%= product.discount %>%</span>
                                     <% } %>
                                 </h4>
                             </div>
@@ -86,8 +84,27 @@
                             </a>
                         </div>
                     </div>
-                    <% }) %>
+                <% }) %>
             </div>
         </div>
     </div>
+
     <%- include('./partials/footer') %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                setTimeout(() => {
+                    flashMessage.style.transition = 'opacity 1s';
+                    flashMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        flashMessage.remove();
+                    }, 1000);
+                }, 3000); // 10 seconds
+            }
+        });
+    </script>
+</body>
+
+</html>

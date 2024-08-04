@@ -6,6 +6,10 @@ const { generateToken }= require('../utils/generateToken')
 module.exports.registerUser = async function (req, res) {
     try {
       let { email, password, fullname } = req.body;
+      if (!email || !password || !fullname) {
+        req.flash("error", "Please Enter Your Details");
+        return res.redirect("/");
+      }
   
       let user = await userModel.findOne({ email: email });
       if (user) {
@@ -36,6 +40,10 @@ module.exports.registerUser = async function (req, res) {
 
 module.exports.loginUser= async function (req, res) {
     let {email,password}=req.body;
+    if (!email || !password ) {
+      req.flash("error", "Please Enter Your Credentials");
+      return res.redirect("/");
+    }
     let user= await userModel.findOne({email:email});
     if(!user){
         req.flash("error", "Incorrect Email")
